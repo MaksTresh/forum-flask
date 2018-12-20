@@ -17,5 +17,6 @@ UPLOAD_FOLDER = r'your\path\forum-flask\uploads'
 ```
 cd your\path\forum-flask\
 $ venv\Scripts\activate
+(venv) $ flask db upgrade
 (venv) $ flask run
 ```
