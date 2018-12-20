@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<style>
+		body, html{
+			height: 100%
+		}
+		.flashes{
+			text-align: center;
+			margin: 0;
+			font-size: 20px;
+    	font-weight: 550;
+    	background-color: #fbf9f9;
+		}
+		.flashes li{
+			display: inline-block;
+			color: red;
+			text-align: center;
+		}
+		.post-comments img{
+			max-height: 300px;
+			max-width: 300px;
+		}
+		.post-text{
+			word-wrap: break-word;
+		}
+		.wrapper{
+			min-height: 100%; 
+			margin-bottom: -61px;
+		}
+		.wrapper::after{
+			content: "";
+  		display: block;
+			height: 61px;
+		}
+	</style>
+<head>
+
+	<meta charset="utf-8">
+	<!-- <base href="/"> -->
+
+	<title>Flood1lka</title>
+	<meta name="description" content="">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<!-- Template Basic Images Start -->
+	<meta property="og:image" content="path/to/image.jpg">
+	<link rel="icon" href="{{ url_for('static', filename='img/favicon/favicon.ico') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/favicon/apple-touch-icon-180x180.png') }}">
+	<!-- Template Basic Images End -->
+	
+	<!-- Custom Browsers Color Start -->
+	<meta name="theme-color" content="#000">
+	<!-- Custom Browsers Color End -->
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.min.css') }}">
+
+</head>
+
+<body>
+
+	<!-- Custom HTML -->
+	<div class="wrapper">
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+		    <ul class="flashes">
+		    {% for message in messages %}
+		      <li>{{ message }}</li>
+		    {% endfor %}
+		    </ul>
+		  {% endif %}
+		{% endwith %}
+
+		<header>
+
+			<div class="head row">
+				<div class="col-md-3 col-sm-4">
+
+					<div class="name">
+						<a href="index.html"><h1>Flood1lka</h1></a>
+						<p>Для всех и обо всем</p>
+					</div>
+
+				</div>
+				<div class="offset-md-6 col-md-3 offset-sm-5 col-sm-3">
+
+					<div class="user">
+						<div class="user-name">
+							{% if current_user.username %}
+							<a href="#new-theme-form" class="new-theme-btn"><i class="fa fa-file-o" aria-hidden="true"></i> Флудануть новую тему</i></a>
+							<a href="#profile-form" class="profile-btn"><i class="fa fa-user-o" aria-hidden="true"></i> {{ current_user.username }}</a>
+							{% else %}
+							<a href="#register-form" class="register-btn"><i class="fa fa-address-card-o" aria-hidden="true"></i> Зарегистрироваться</a>
+							<a href="#login-form" class="login-btn"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Войти на сайт</a>
+							{% endif %}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</header>
+
+		{% block content %}{% endblock %}
+	</div>
+	<footer>
+		<div class="cop" style="height: 100%">
+			<p>2018 © Flood1lka</p>
+		</div>
+	</footer>
+
+	{% if current_user.username %}
+	<form name="profile-form" id="profile-form" class="white-popup popup-form mfp-hide" method="post" action="{{ url_for('profile') }}">
+		{{ profile_form.hidden_tag() }}
+		<h2>{{ current_user.username }}</h2>
+		{{ profile_form.email.label }}
+		{{ profile_form.email(placeholder="Старый email") }} <br>
+		{{ profile_form.email2(placeholder="Новый email", style="margin-right: 4px") }}
+		{{ profile_form.password.label }}
+		{{ profile_form.password(placeholder="Старый пароль") }} <br>
+		{{ profile_form.password2(placeholder="Новый пароль") }} <br>
+		{{ profile_form.submit(class='button') }} <br>
+		<a href="{{ url_for('logout') }}" class="button">Выйти</a>
+	</form>
+	<form name="new-theme-form" id="new-theme-form" class="white-popup popup-form mfp-hide" method="post" action="{{ url_for('newtheme') }}">
+		{{ newtheme_form.hidden_tag() }}
+		{{ newtheme_form.header.label }}
+		{{ newtheme_form.header }}
+		{{ newtheme_form.body.label }}
+		{{ newtheme_form.body }}
+		{{ newtheme_form.submit(class='button') }}
+	</form>
+	{% else %}
+	<form id="login-form" class="white-popup popup-form mfp-hide" method="post" action="{{ url_for('login') }}">
+		{{ login_form.hidden_tag() }}
+		<h2>Вход на сайт</h2>
+		{{ login_form.email.label }}
+		{{ login_form.email }}
+		{% for error in login_form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+		{{ login_form.password.label }}
+		{{ login_form.password }} <br>
+		{% for error in login_form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+		{{ login_form.submit(class='button') }}
+	</form>
+	<form id="register-form" class="white-popup popup-form mfp-hide" method="post" action="{{ url_for('register') }}">
+		{{ register_form.hidden_tag() }}
+		<h2>Регистрация на сайте</h2>
+		{{ register_form.email.label }}
+		{{ register_form.email }}
+		{{ register_form.username.label }}
+		{{ register_form.username }}
+		{{ register_form.password.label }}
+		{{ register_form.password }} <br>
+		{{ register_form.password2.label }}
+		{{ register_form.password2 }}
+		{{ register_form.submit(class='button') }}
+	</form>
+	{% endif %}
+
+
+	<script src="{{ url_for('static', filename='js/scripts.min.js') }}"></script>
+
+</body>
+</html>

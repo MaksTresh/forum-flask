@@ -1,0 +1,82 @@
+{% extends "index.html" %}
+
+{% block content %}	
+	<section>
+		<div class="row">
+				<div class="col-md-12">
+					<div class="posts">
+						<div class="header">
+							<div class="row">
+								<div class="col-lg-8 col-md-12">
+									<p class="post-title">{{ post.header }}</p>
+								</div>
+								<div class="col-lg-4 col-md-12">
+									<div class="post-head">
+										<p>Post by <span class="post-author-name">{{ post.author.username }}</span> (rating: <span class="post-rate">{{ post.rate }}</span>)</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="content">
+							<p class="post-text">{{ post.body }}</p>
+							<div class="rate-block">
+								<a href="/plus?postid={{ post.id }}"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
+								<a href="/minus?postid={{ post.id }}"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+							</div>
+						</div>
+						<div class="post-comments">
+							<h3>Комментарии:</h3>
+							{% for comment in comments[(comments_block.active-1)*20:] %}
+							<div class="item">
+								<p class="author-name">{{ comment.author.username }}</p>
+								<p class="text">{{ comment.body }}</p>
+								<img src="/uploads/{{ comment.image }}" alt="">
+							</div>
+							{%- if loop.index >= 20 %}{% break %}{% endif %}
+							{% endfor %}
+						</div>
+						<div class="pages-block">
+
+							<div class="left ar"><a href="/post.html?id={{ post.id }}&comment={{ comments_block.active-1 }}"><i class="fa fa-angle-left" aria-hidden="true"></i> Пред</a></div>
+							<ul>
+								{% for comment in range(comments_block.active-5 if comments_block.avaible + 1 - comments_block.active  >= 5 else comments_block.active-5 - (5 - (comments_block.avaible + 1 - comments_block.active)), comments_block.active) %}
+									{% if comment < 1 %}{% continue %}{% endif %}
+									<li><a href="/post.html?id={{ post.id }}&comment={{ comment }}"><span>{{ comment }}</span>,</a></li>
+								{% endfor %}
+								{% for comment in range(comments_block.active, comments_block.avaible + 1) %}
+									{% if comments_block.active == comment %}
+	        							<li class="active">
+	        						{% else %}
+	        							<li>
+	        						{% endif %}
+
+									{% if comments_block.avaible == comment %}
+	        							<a href="/post.html?id={{ post.id }}&comment={{ comment }}"><span>{{ comment }}</span></a></li>
+	        						{% elif loop.index >= (5 if comments_block.active > 5 else 5+(6-comments_block.active)) %}
+	        							<a href="/post.html?id={{ post.id }}&comment={{ comment }}"><span>{{ comment }}</span>...</a></li>
+	        							{% break %}
+	        						{% else %}
+	        							<a href="/post.html?id={{ post.id }}&comment={{ comment }}"><span>{{ comment }}</span>,</a></li>
+	        						{% endif %}
+
+        						{% endfor %}
+							</ul>
+							<div class="right ar"><a href="/post.html?id={{ post.id }}&comment={{ comments_block.active+1 }}">След <i class="fa fa-angle-right" aria-hidden="true"></i></a></div>
+						</div>
+						{% if current_user.username %}
+						<div class="write-comment-block">
+							<form action="/file?postid={{ post.id }}" enctype="multipart/form-data" method="post">
+								{{ comment_form.hidden_tag() }}
+								<h3>Оставить комментарий</h3>
+								<label for="image" >Прикрепить картинку</label>
+								<input type="file" id="image" name="image" accept="image/x-png,image/gif,image/jpeg"> <br>
+								{{ comment_form.body(style="width: 100%; height: 200px")}} <br>
+								{{ comment_form.submit(class="button") }}
+							</form>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+		</div>
+	</section>
+{% endblock %}

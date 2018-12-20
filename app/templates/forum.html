@@ -1,0 +1,72 @@
+{% extends "index.html" %}
+
+{% block content %}
+	<section>
+		<div class="row">
+				<div class="col-md-12">
+					<div class="posts">
+						<div class="header">
+							<div class="row">
+								<div class="col-lg-4 col-md-12">
+									<p>Последние публикации:</p>
+								</div>
+								<div class="col-lg-8 col-md-12">
+									<div class="sort-panel">
+										<p>Отсортировано по <a class="active">рейтингу</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{% for post in 	posts[(pages_block.active-1)*20:] %}
+						<div class="item">
+							<div class="row">
+								<div class="col-lg-7 col-md-12">
+									<div class="title"><a href="post.html?id={{ post.id }}"><i class="fa fa-circle-o" aria-hidden="true"></i> {{ post.header }}</a></div>
+								</div>
+								<div class="col-lg-1 col-md-3 col-sm-4 col-xs-1">
+									<div class="rate">{{ post.rate }}</div>
+								</div>
+								<div class="col-lg-2 col-md-5 col-sm-4 col-xs-1">
+									<div class="author">{{ post.author.username }}</div>
+								</div>
+								<div class="col-lg-2 col-md-4 col-sm-4 col-xs-1">
+									<div class="date">{{ post.date }}</div>
+								</div>
+							</div>
+						</div>
+						{%- if loop.index >= 20 %}{% break %}{% endif %}
+						{% endfor %}
+						
+						<div class="pages-block">
+							<div class="left ar"><a href="/index.html?page={{ pages_block.active-1 }}"><i class="fa fa-angle-left" aria-hidden="true"></i> Пред</a></div>
+							<ul>
+								{% for page in range(pages_block.active-5 if pages_block.avaible + 1 - pages_block.active  >= 5 else pages_block.active-5 - (5 - (pages_block.avaible + 1 - pages_block.active)), pages_block.active) %}
+									{% if page < 1 %}{% continue %}{% endif %}
+									<li><a href="/index.html?page={{ page }}"><span>{{ page }}</span>,</a></li>
+								{% endfor %}
+								{% for page in range(pages_block.active, pages_block.avaible + 1) %}
+									{% if pages_block.active == page %}
+	        							<li class="active">
+	        						{% else %}
+	        							<li>
+	        						{% endif %}
+
+									{% if pages_block.avaible == page %}
+	        							<a href="/index.html?page={{ page }}"><span>{{ page }}</span></a></li>
+	        						{% elif loop.index >= (5 if pages_block.active > 5 else 5+(6-pages_block.active)) %}
+	        							<a href="/index.html?page={{ page }}"><span>{{ page }}</span>...</a></li>
+	        							{% break %}
+	        						{% else %}
+	        							<a href="/index.html?page={{ page }}"><span>{{ page }}</span>,</a></li>
+	        						{% endif %}
+
+        				{% endfor %}
+							</ul>
+							<div class="right ar"><a href="/index.html?page={{ pages_block.active+1 }}">След <i class="fa fa-angle-right" aria-hidden="true"></i></a></div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</section>
+{% endblock %}
