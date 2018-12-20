@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
 class ProfileForm(FlaskForm):
 	email = EmailField('Изменить e-mail', validators=[Email()])
 	email2 = EmailField('Новый email', validators=[Email()])
-	password = PasswordField('Старый пароль', validators=[])
+	password = PasswordField('Изменить пароль', validators=[])
 	password2 = PasswordField('Новый пароль', validators=[])
 	submit = SubmitField('Применить')
 
