@@ -1,5 +1,5 @@
 # forum-flask
-Flask-forum is very simple web forum written with Python (language) and Flask (web framework). 
+Forum-flask is very simple web forum written with Python (language) and Flask (web framework). 
 ## Getting Started
 Change absolute paths
 
