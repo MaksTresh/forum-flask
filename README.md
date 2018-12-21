@@ -10,7 +10,7 @@ SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 ```
 *app\routes.py*
 ```
-#line 5
+#line 10
 UPLOAD_FOLDER = r'your\path\forum-flask\uploads'
 ```
 ## Run
