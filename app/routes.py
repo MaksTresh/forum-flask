@@ -7,7 +7,7 @@ from app.models import User, Post, Comment
 import re
 import os
 
-UPLOAD_FOLDER = r'your\path\forum-flask\uploads'
+UPLOAD_FOLDER = os.path.abspath('../uploads')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
